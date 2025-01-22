@@ -7,6 +7,7 @@ import seaborn as sns
 from sklearn.preprocessing import StandardScaler
 import pickle
 
+
 scaler = StandardScaler()
 
 # --- Streamlit app ---
@@ -24,6 +25,7 @@ training_cols = ['USMER_1', 'USMER_2', 'SEX_1', 'SEX_2', 'PATIENT_TYPE_1',
 st.sidebar.header("Input Parameters")
 user_input = {
     "USMER": st.sidebar.selectbox("USMER", [1, 2]),
+    "MEDICAL_UNIT": st.sidebar.selectbox("MEDICAL_UNIT", [1, 2]),
     "SEX": st.sidebar.selectbox("SEX", [1, 2]),
     "PATIENT_TYPE": st.sidebar.selectbox("PATIENT_TYPE", [1, 2]),
     "PNEUMONIA": st.sidebar.selectbox("PNEUMONIA", [1, 2]),
@@ -41,6 +43,7 @@ user_input = {
     "AGE": st.sidebar.slider("AGE", 0, 120, 42),
 }
 
+
 input_df = pd.DataFrame([user_input])
 input_df = input_df.drop(columns=["MEDICAL_UNIT"])
 user_data = input_df.drop(columns=['AGE'])
@@ -57,16 +60,12 @@ for col in training_cols:
 
 user_data_dummies = user_data_dummies[training_cols]
 
-# Button to trigger prediction
-if st.sidebar.button("Submit"):
-    with open('model.pkl', 'rb') as file:
-        lr_model = pickle.load(file)
+with open('model.pkl', 'rb') as file:
+    lr_model = pickle.load(file)
 
-    # Prediction
-    prediction = lr_model.predict(user_data_dummies)
+prediction = lr_model.predict(user_data_dummies)
 
-    # Display prediction result
-    if prediction[0] == 1:
-        st.write("High Risk")
-    else:
-        st.write("Low Risk")
+if prediction[0] == 1:
+    st.write("High Risk")
+else:
+    st.write("Low Risk")
