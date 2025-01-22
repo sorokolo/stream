@@ -58,7 +58,7 @@ for col in training_cols:
     if col not in user_data_dummies:
         user_data_dummies[col] = 0
 
-user_data_dummies = user_data_dummies[josephj_model.py]
+user_data_dummies = user_data_dummies[training_cols]
 
 with open('model.pkl', 'rb') as file:
     lr_model = pickle.load(file)
